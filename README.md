@@ -376,6 +376,9 @@ The author assumes **no liability for misuse**.
 
 ---
 
+# License
+PhantomShell is licensed under the [GNU General Public License](LICENSE) and the [PhantomShell Commercial License](C-LICENSE)- see the LICENSE file for details.
+
 # 👨‍💻 Author
 
 **Dodin Mel Adrien Lawrence Enzo**
