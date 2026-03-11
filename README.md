@@ -103,8 +103,15 @@ No external dependencies.
 
 ```bash
 git clone https://github.com/adrilaw/PhantomShell.git
+
 cd PhantomShell
+
 chmod +x phantomshell.py
+
+chmod +x phantomc2.py
+
+python3 phantomc2.py --help
+
 python3 phantomshell.py --help
 ```
 
