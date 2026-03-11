@@ -131,7 +131,11 @@ python3 phantomshell.py --help
 ```bash
 python3 phantomc2.py --port 4444 --web-port 8080 --password RedTeam2026
 ```
+## For more information on the Phantom C2 use the command below
 
+```bash
+python3 phantomc2.py --port 4444 --help
+```
 ---
 
 ### Terminal 2 — Generate payload
