@@ -374,7 +374,7 @@ def print_result(payload: str, port: int, fmt: str, layers: int, profile: str):
     print(f"{C['r']}{payload}{C['R']}")
     print(f"{C['d']}{'─'*74}{C['R']}\n")
     print(f"{STAR} Format   : {C['c']}{fmt}{C['R']}")
-    print(f"{STAR} Listener : {C['g']}nc -lvnp {port}{C['R']}\n")
+    print(f"{STAR} Listener : {C['g']}python3 phantomc2.py --port 4444 --web-port 8080 --password RedTeam2026 {port}{C['R']}\n")
 
 
 # ── File helper ─────────────────────────────────────────────────
