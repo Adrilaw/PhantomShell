@@ -376,8 +376,9 @@ The author assumes **no liability for misuse**.
 
 ---
 
-# License
+# 📝 License
 PhantomShell is licensed under the [GNU General Public License](LICENSE) and the [PhantomShell Commercial License](C-LICENSE)- see the LICENSE file for details.
+
 
 # 👨‍💻 Author
 
