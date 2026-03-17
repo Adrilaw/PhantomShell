@@ -124,6 +124,8 @@ python3 phantomshell.py --help
 ```bash
 python3 phantomc2.py --port 4444 --web-port 8080 --password RedTeam2026
 ```
+<img width="1845" height="907" alt="image" src="https://github.com/user-attachments/assets/59b5f901-8dfa-43c6-8555-29e55b53ca7b" />
+
 ## For more information on the Phantom C2 use the command below
 
 ```bash
@@ -136,6 +138,7 @@ python3 phantomc2.py --port 4444 --help
 ```bash
 python3 phantomshell.py revshell -i 10.10.10.5 -p 4444
 ```
+<img width="1920" height="997" alt="Screenshot_20260317_120257" src="https://github.com/user-attachments/assets/fc85d30a-9fd3-46fe-9f07-08f9692deeaa" />
 
 Run the generated command on the Windows target.
 
