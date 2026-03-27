@@ -364,7 +364,7 @@ To make the script portable and bypass certain execution policy restrictions, co
 
 Download Tool: PowerShell to exe/msi Converter (Microsoft Store)
 
-Steps:
+# Steps:
 
 ### 1.Open the converter application.
 
